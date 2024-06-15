@@ -1,0 +1,141 @@
+//DOUBLY LINKED LIST
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+    struct node *prev;
+};
+typedef struct node Node;
+
+//FUNCTIONS
+int Isempty (Node *list);
+int IsLast(Node *list);
+void Traverse (Node *list);
+void DelRandom(Node *list, int e);
+Node *Find(Node *list,int e);
+
+void InsertBeg(Node *list,int e);
+
+//MAIN CODE
+int main()
+{
+    Node *list=malloc(sizeof(Node));
+    list->next= NULL;
+    list->prev=NULL;
+
+    int ch,e;
+    printf("1.Traversal\n2.Deletion\n");
+
+    do
+    {
+        printf("Enter your choice: ");
+        scanf("%d",&ch);
+
+        switch(ch)
+        {
+            case 1:
+            Traverse(list);
+            break;
+
+            case 2:
+            printf("Enter element to be deleted: ");
+            scanf("%d",&e);
+            DelRandom(list,e);
+            break;
+           
+           
+            case 8:
+            printf("Enter element: ");
+            scanf("%d",&e);
+            InsertBeg(list,e);
+            break;
+        }
+    }while(ch<=8);
+    return 0;
+}
+
+int Isempty(Node *list)
+{
+    if (list->next == NULL)
+    return 1;
+    else
+    return 0;
+}
+
+void Traverse (Node *list)
+{
+    if(!Isempty(list))
+    {
+        Node *position;
+        position=list;
+        while(position->next!=NULL)
+        {
+            position=position->next;
+            printf("%d\t",position->data);
+        }
+        printf("\n");
+    }
+    else
+    printf("The list is Empty\n");
+}
+
+Node *Find(Node *list,int e)
+{
+    Node *position;
+    position=list;
+    while(position !=NULL && position->data!=e)
+    position=position->next;
+
+    return position;
+}
+
+int IsLast(Node *position)
+{
+    if(position->next==NULL)
+    return 1;
+    else
+    return 0;
+}
+
+void DelRandom (Node *list,int e)
+{
+    if(!Isempty(list))
+    {
+        Node *temp;
+        Node *position;
+        position=Find(list,e);
+        if(!IsLast(position))
+        {
+        temp=position;
+        position->prev->next=position->next;
+        position->next->prev=position->prev;
+        printf("Deleted Element %d\n",temp->data);
+        free(temp);
+    }
+    }
+    else
+    printf("The list is Empty\n");
+}
+
+//INSERTION
+void InsertBeg(Node *list,int e)
+{
+    Node *newnode = malloc(sizeof(Node));
+    newnode->data=e;
+   
+    if(Isempty(list))
+    newnode->next=NULL;
+   
+    else
+    {
+        newnode->next=list->next;
+        newnode->next->prev=newnode;
+    }
+    newnode->prev=list;
+    list->next=newnode;
+
+}
